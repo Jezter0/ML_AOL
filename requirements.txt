@@ -3,4 +3,3 @@ joblib
 scikit-learn
 xgboost
 numpy
-flask-ngrok
