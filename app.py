@@ -17,6 +17,7 @@ models = {
     'xgboost': joblib.load(os.path.join(MODELS_DIR, 'xgboost_model.pkl')),
     'svc': joblib.load(os.path.join(MODELS_DIR, 'svc_model.pkl')),
     'stacking': joblib.load(os.path.join(MODELS_DIR, 'stacking_classifier_model.pkl')),
+    'naive_bayes': joblib.load(os.path.join(MODELS_DIR, 'naivebayes_model.pkl'))
 }
 
 vectorizer = joblib.load(os.path.join(MODELS_DIR, 'tfidf_vectorizer.pkl'))
