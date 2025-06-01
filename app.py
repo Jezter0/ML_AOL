@@ -16,6 +16,7 @@ models = {
     'logistic': joblib.load(os.path.join(MODELS_DIR, 'logistic_regression_model.pkl')),
     'xgboost': joblib.load(os.path.join(MODELS_DIR, 'xgboost_model.pkl')),
     'svc': joblib.load(os.path.join(MODELS_DIR, 'svc_model.pkl')),
+    'stacking': joblib.load(os.path.join(MODELS_DIR, 'stacking_classifier_model.pkl')),
 }
 
 vectorizer = joblib.load(os.path.join(MODELS_DIR, 'tfidf_vectorizer.pkl'))
