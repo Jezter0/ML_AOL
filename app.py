@@ -6,11 +6,9 @@ import os
 
 app = Flask(__name__)
 
-# Paths
 BASE_DIR = os.path.dirname(__file__)
 MODELS_DIR = os.path.join(BASE_DIR, 'models')
 
-# Load models and vectorizer
 models = {
     'random_forest': joblib.load(os.path.join(MODELS_DIR, 'random_forest_model.pkl')),
     'logistic': joblib.load(os.path.join(MODELS_DIR, 'logistic_regression_model.pkl')),
@@ -25,15 +23,17 @@ vectorizer = joblib.load(os.path.join(MODELS_DIR, 'tfidf_vectorizer.pkl'))
 # Preprocessing function
 def preprocess_email(email: str) -> str:
     email = email.lower()
-    email = re.sub(f"[{string.punctuation}]", " ", email)
-    email = re.sub(r"\s+", " ", email).strip()
+    email = re.sub(r"http\S+|www\S+|https\S+", '', email, flags=re.MULTILINE)
+    email = re.sub(r'\d+', '', email)
+    email = email.translate(str.maketrans('', '', string.punctuation))
+    email = re.sub(r'\s+', ' ', email).strip()
     return email
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     result = None
     probability = None
-    chosen_model = 'random_forest'  # default
+    chosen_model = 'logistic'  # default
 
     if request.method == 'POST':
         email_text = request.form.get('email', '').strip()
@@ -44,11 +44,9 @@ def index():
             features = vectorizer.transform([cleaned])
             model = models[chosen_model]
 
-            # Handle SVC separately if needed
             if hasattr(model, "predict_proba"):
                 proba = model.predict_proba(features)[0][1]
             else:
-                # For models without predict_proba like some SVCs
                 prediction = model.predict(features)[0]
                 proba = 1.0 if prediction == 1 else 0.0
 
